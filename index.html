@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#172554">
+<title>MISI SERI SEMARA — Escape Room Sekolah</title>
+<style>
+:root{--navy:#15113b;--blue:#5b4bff;--gold:#ffd166;--mint:#99f6e4;--paper:#fbfaff;--ink:#1b1b38;--pink:#ffb4d2}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 12% 0%,#5b2b91 0,#24205b 34%,#10142f 72%,#090d20 100%);color:#fff;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer;touch-action:manipulation}
+.wrap{max-width:820px;margin:auto;padding:14px 14px 30px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0 14px}
+.brand{font-weight:900;letter-spacing:.08em;font-size:.82rem;color:#fde68a}
+.pill{font-size:.78rem;border:1px solid #ffffff35;border-radius:99px;padding:7px 10px;background:#ffffff10}
+.hero{border:1px solid #ffffff25;background:linear-gradient(135deg,#312e81 0%,#6d28d9 42%,#0f766e 100%);border-radius:24px;padding:22px 18px;box-shadow:0 18px 45px #0004;position:relative;overflow:hidden}
+.hero:after{content:"🔐";position:absolute;right:15px;top:15px;font-size:3.2rem;opacity:.28}
+h1{font-size:clamp(1.6rem,6vw,2.6rem);line-height:1.05;margin:7px 0 10px;max-width:82%}
+.sub{color:#e0e7ff;line-height:1.55;margin:0;max-width:95%}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.stat{background:#ffffff12;border:1px solid #ffffff20;border-radius:13px;padding:9px 12px;font-size:.86rem}
+.panel{background:var(--paper);color:var(--ink);border-radius:22px;padding:18px;margin-top:14px;box-shadow:0 12px 30px #0002}
+.panel h2{font-size:1.18rem;margin:0 0 8px;color:#172554}
+.muted{color:#536078;font-size:.94rem;line-height:1.5}
+.roomtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.roomicon{font-size:2.5rem}
+.progress{height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:12px 0}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#8b5cf6);width:0%;transition:width .25s}
+.clue{background:#eef2ff;border:1px solid #c7d2fe;border-radius:15px;padding:14px;margin:12px 0;line-height:1.5}
+.options{display:grid;gap:9px;margin-top:12px}
+.opt{width:100%;text-align:left;border:2px solid #dbe3f0;background:white;border-radius:14px;padding:13px 14px;color:#18233b;min-height:50px}
+.opt:active{transform:scale(.99)}
+.opt:hover{border-color:#8b5cf6;background:#f5f3ff}.opt:disabled{opacity:.75;background:#ecfdf5;border-color:#34d399}
+.opt:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #fbbf24;outline-offset:2px}
+.primary{border:0;border-radius:14px;background:linear-gradient(135deg,#5b4bff,#7c3aed);color:white;padding:13px 17px;font-weight:850;min-height:48px;box-shadow:0 5px 0 #34248b;transition:transform .12s,box-shadow .12s}.primary:active{transform:translateY(3px);box-shadow:0 2px 0 #34248b}
+.secondary{border:1px solid #cbd5e1;border-radius:14px;background:white;color:#172554;padding:11px 14px;font-weight:700;min-height:46px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.feedback{margin-top:12px;border-radius:13px;padding:12px;line-height:1.45;display:none}
+.feedback.good{display:block;background:#dcfce7;color:#14532d;border:1px solid #86efac}
+.feedback.bad{display:block;background:#ffedd5;color:#7c2d12;border:1px solid #fdba74}
+.lockrow{display:flex;gap:8px;align-items:center;margin-top:14px}
+.digit{font-size:1.5rem;font-weight:900;letter-spacing:.18em;color:#172554;background:#e0e7ff;border-radius:12px;padding:10px 14px;min-width:110px;text-align:center}
+.hidden{display:none!important}
+#timerBar.timeup{background:#ecfdf5!important;color:#065f46!important;border-color:#6ee7b7!important}
+input[type=checkbox]{accent-color:#6d28d9}
+.ending{text-align:center;padding:10px 0}
+.ending .big{font-size:4rem}
+.footer{text-align:center;color:#c7d2fe;font-size:.78rem;padding:18px 8px}
+small{color:#64748b}
+@media(min-width:600px){.panel{padding:24px}.hero{padding:28px}.options{grid-template-columns:1fr 1fr}}
+@media print{
+ body{background:#fff!important;color:#172554!important}
+ body *{visibility:hidden!important}
+ #certificatePanel,#certificatePanel *{visibility:visible!important}
+ #certificatePanel{display:block!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;margin:0!important;padding:0!important;box-shadow:none!important;border:0!important}
+ #certificate{border:8px double #c49a2d!important;break-inside:avoid}
+ #certificatePanel .muted,#certificatePanel .actions{display:none!important}
+ @page{size:A4 landscape;margin:12mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="top"><div class="brand">UNIT BIMBINGAN & KAUNSELING</div><div class="pill">🎮 Game telefon</div></div>
+ <section class="hero">
+  <div class="brand">MISI SERI SEMARA</div>
+  <h1>ESCAPE ROOM: MISTERI SEKOLAH</h1>
+  <p class="sub">Sekolah hampir dikunci! Selesaikan 4 bilik misteri, kumpulkan kod rahsia dan bantu rakan dengan kemahiran mengenali emosi, mengurus tekanan serta empati.</p>
+  <div class="stats"><div class="stat">🧩 4 bilik teka-teki</div><div class="stat">🔎 Cari petunjuk</div><div class="stat">💛 Misi empati</div></div>
+ </section>
+ <section class="panel" id="intro">
+  <h2>📜 Fail Kes #SEMARA-04</h2>
+  <p class="muted">Loceng terakhir telah berbunyi. Pintu bilik misteri terkunci dan satu nota ditinggalkan: <b>“Kunci sebenar bukan pada pintu, tetapi pada cara kamu memahami diri dan orang lain.”</b></p>
+  <p class="muted">Pilih jawapan dengan teliti. Setiap bilik memberi satu digit kod. Kamu boleh cuba semula tanpa had—yang penting belajar dan terus mencuba.</p>
+  <label for="player" style="display:block;font-weight:800;margin:12px 0 6px">Nama penuh murid / ejen <span style="color:#dc2626">*</span></label>
+  <input id="player" maxlength="60" required autocomplete="name" placeholder="Masukkan nama penuh untuk sijil" style="width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:12px;color:#172033">
+  <small style="display:block;margin-top:6px">Nama ini akan dipaparkan pada sijil penyertaan digital.</small>
+  <div id="nameerror" class="feedback bad" style="margin-top:8px" role="alert">Sila masukkan nama penuh sebelum memulakan misi.</div>
+  <div style="margin-top:16px;padding:14px;border:1px solid #c7d2fe;background:#f5f3ff;border-radius:15px">
+   <h3 style="margin:0 0 10px;color:#312e81">⚙️ Tetapan Misi</h3>
+   <label style="display:flex;gap:10px;align-items:flex-start;margin:10px 0;color:#1e293b"><input id="soundOn" type="checkbox" checked style="margin-top:5px;transform:scale(1.2)"><span><b>🔊 Bunyi misteri</b><br><small>Audio latar lembut dan bunyi kunci apabila bilik berjaya dibuka.</small></span></label>
+   <label style="display:flex;gap:10px;align-items:flex-start;margin:10px 0;color:#1e293b"><input id="timerOn" type="checkbox" style="margin-top:5px;transform:scale(1.2)"><span><b>⏱️ Hidupkan pemasa misi</b><br><small>Pilihan guru sahaja. Jika masa tamat, murid masih boleh meneruskan permainan tanpa penalti.</small></span></label>
+   <label for="timerMinutes" style="display:block;font-weight:750;color:#1e293b;margin:10px 0 6px">Tempoh misi</label>
+   <select id="timerMinutes" style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;background:white;color:#172033"><option value="5">5 minit</option><option value="10" selected>10 minit</option><option value="15">15 minit</option><option value="20">20 minit</option><option value="30">30 minit</option></select>
+   <small style="display:block;margin-top:7px">Tip: Untuk aktiviti refleksi emosi dan empati, guru boleh mematikan pemasa supaya murid tidak berasa tertekan.</small>
+  </div>
+  <div class="actions"><button class="primary" id="start">🚪 Mulakan Misi</button></div>
+ </section>
+ <section class="panel hidden" id="game">
+  <div class="roomtop"><div><small id="roomlabel">BILIK 1 DARIPADA 4</small><h2 id="roomtitle">Bilik Emosi</h2></div><div class="roomicon" id="roomicon">🧠</div></div>
+  <div id="timerBar" class="stat hidden" style="margin:0 0 10px;background:#fff7ed;color:#9a3412;border-color:#fed7aa;font-weight:850" role="status" aria-live="polite">⏱️ Masa misi: <span id="timerText">10:00</span></div>
+  <div class="progress"><span id="progressbar"></span></div>
+  <div class="stats" style="margin:8px 0 12px"><div class="stat" style="background:#eef2ff;color:#312e81;border-color:#c7d2fe">⭐ Markah: <b id="score">0</b></div><div class="stat" style="background:#fff7ed;color:#9a3412;border-color:#fed7aa">❤️ Peluang: <b id="lives">3</b></div><div class="stat" style="background:#ecfeff;color:#155e75;border-color:#a5f3fc">🗝️ Kunci: <b id="keys">0/4</b></div></div>
+  <p class="muted" id="story"></p>
+  <div class="clue" id="clue"></div>
+  <div id="options" class="options"></div>
+  <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+  <div class="lockrow hidden" id="digitrow"><div><small>DIGIT KOD DIJUMPAI</small><div class="digit" id="digit">•</div></div><div class="muted" id="digitnote"></div></div>
+  <div class="actions"><button class="primary hidden" id="next">Buka Bilik Seterusnya ➜</button><button class="secondary" id="hint">🔍 Minta Petunjuk</button></div>
+ </section>
+ <section class="panel hidden" id="finish">
+  <div class="ending"><div class="big">🏆</div><h2 id="finishTitle">Misi Berjaya!</h2><p class="muted" id="finishText"></p><div class="digit" id="finalcode" style="margin:14px auto;max-width:230px">----</div><p class="muted">Ingat: emosi bukan musuh. Berhenti seketika, namakan perasaan, pilih tindakan yang selamat dan dapatkan bantuan apabila perlu.</p><div class="actions" style="justify-content:center"><button class="primary" id="certificateBtn">🎓 Dapatkan Sijil</button><button class="secondary" id="restart">🔁 Main Semula</button></div></div>
+ </section>
+ <section class="panel hidden" id="certificatePanel">
+   <div id="certificate" style="background:#fffdf7;border:8px double #c49a2d;border-radius:8px;padding:clamp(16px,4vw,32px);text-align:center;color:#172554">
+    <img alt="Lencana rasmi SMK Tun Fatimah Hashim" src="data:image/png;base64,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" style="display:block;width:112px;height:auto;max-height:125px;object-fit:contain;margin:0 auto 10px">
+    <div style="font-size:.8rem;letter-spacing:.12em;font-weight:900;color:#9a6b12">SMK TUN FATIMAH HASHIM</div>
+    <div style="font-size:.8rem;letter-spacing:.12em;font-weight:900;color:#9a6b12">UNIT BIMBINGAN DAN KAUNSELING</div>
+    <h2 style="font-size:clamp(1.5rem,5vw,2.2rem);margin:12px 0;color:#172554">SIJIL PENCAPAIAN</h2>
+    <div style="font-size:.92rem;color:#475569">MISI SERI SEMARA</div>
+    <div style="font-size:1.35rem;margin:10px 0">Escape Room: Misteri Sekolah</div>
+    <p style="color:#475569">Dengan ini diperakui bahawa</p>
+    <div id="certName" style="font-size:clamp(1.35rem,5vw,2rem);font-weight:900;color:#7c3aed;border-bottom:2px solid #d4af37;padding:8px 4px;margin:12px auto;max-width:560px;overflow-wrap:anywhere"></div>
+    <p style="line-height:1.6;color:#334155">telah berjaya menyelesaikan misi teka-teki dan menunjukkan pemahaman tentang mengenali emosi, mengurus tekanan serta mengamalkan empati.</p>
+    <div style="font-size:1.8rem;margin:10px">🔐 ✦ 💛 ✦ 🧩</div>
+    <div style="font-size:.8rem;color:#64748b;margin-top:12px">Teruskan menjadi insan yang prihatin, berani meminta bantuan dan menyokong orang lain.</div>
+    <div id="certScore" style="margin-top:10px;font-weight:800;color:#312e81"></div><div style="margin-top:18px;font-weight:800;color:#9a6b12">EJEN SERI SEMARA</div>
+   </div>
+   <p class="muted" style="margin-top:12px">Tip: tekan “Cetak / Simpan PDF”. Dalam menu cetakan telefon atau komputer, pilih pilihan simpan sebagai PDF jika tersedia.</p>
+   <div class="actions"><button class="primary" id="printCert">🖨️ Cetak / Simpan PDF</button><button class="secondary" id="backFinish">Kembali</button></div>
+  </section>
+ <div class="footer">MISI SERI SEMARA · Kenali emosi • Urus tekanan • Pilih empati</div>
+</div>
+<script>
+const rooms=[
+ {title:"Bilik Cermin Emosi",icon:"🪞",story:"Cermin di bilik kaunseling berbisik: “Untuk membuka pintu, fahami apa yang sedang berlaku dalam hati.” Selesaikan tiga cabaran emosi untuk mendapatkan kunci pertama.",questions:[
+  {clue:"Seorang murid mendapat keputusan ujian yang kurang baik lalu berkata, “Saya kecewa dengan diri sendiri.” Apakah respons paling membantu?",hint:"Akui perasaannya dahulu dan beri ruang untuk bercerita.",options:[["“Alah, perkara kecil sahaja.”",false,"Perasaan murid tidak patut diperkecilkan."],["“Nampaknya kamu kecewa. Nak cerita apa yang paling merisaukan?”",true,"Bagus! Kamu mengenali emosi dan membuka ruang untuk berkongsi."],["“Jangan sedih. Orang lain lebih teruk.”",false,"Membandingkan masalah boleh membuatkan seseorang rasa tidak difahami."]]},
+  {clue:"Kamu berasa marah apabila rakan memotong barisan. Apakah tindakan yang paling sesuai?",hint:"Berhenti seketika, tenangkan diri dan nyatakan perasaan dengan sopan.",options:[["Menolak rakan itu supaya dia belajar.",false,"Tindakan agresif boleh mencederakan orang."],["Tarik nafas dan beritahu dengan tegas tetapi sopan bahawa kamu sedang menunggu giliran.",true,"Tepat! Kamu mengawal tindak balas dan menyampaikan keperluan dengan baik."],["Memendam marah sepanjang hari.",false,"Memendam tanpa cara sihat boleh menambah tekanan."]]},
+  {clue:"Kamu berasa gementar sebelum pembentangan. Apakah yang boleh membantu kamu mengenali dan mengurus emosi itu?",hint:"Namakan emosi dan cuba satu strategi menenangkan diri.",options:[["Beritahu diri bahawa gementar itu biasa, tarik nafas perlahan dan bersedia sedikit demi sedikit.",true,"Betul! Emosi boleh diterima sambil kita memilih tindakan yang membantu."],["Terus melarikan diri tanpa mencuba.",false,"Mengelak mungkin melegakan seketika tetapi tidak membina keyakinan."],["Marah kepada diri sendiri kerana takut.",false,"Menghukum diri boleh menambah tekanan."]]}
+ ]},
+ {title:"Bilik Jam Berdetik",icon:"⏳",story:"Jam semakin laju. Tugasan bertimbun dan tekanan memenuhi bilik. Selesaikan tiga cabaran pengurusan tekanan untuk membuka kunci kedua.",questions:[
+  {clue:"Kamu ada tiga tugasan yang perlu dihantar dan mula panik. Apakah langkah pertama yang paling membantu?",hint:"Tenangkan tubuh, senaraikan tugasan, kemudian utamakan satu demi satu.",options:[["Buat semuanya serentak tanpa rehat.",false,"Melakukan banyak perkara serentak boleh menambahkan tekanan."],["Tarik nafas perlahan, senaraikan tugasan dan pilih yang paling penting dahulu.",true,"Tepat! Kamu menenangkan diri dan membina pelan yang jelas."],["Terus tutup semua buku dan abaikan semuanya.",false,"Rehat boleh membantu, tetapi elok disertai rancangan untuk kembali bertindak."]]},
+  {clue:"Apabila terlalu tertekan, badan kamu terasa tegang dan fikiran sukar fokus. Apakah pilihan yang sihat?",hint:"Pilih strategi ringkas yang selamat dan boleh dilakukan sekarang.",options:[["Bernafas perlahan, minum air dan regangkan badan sebentar.",true,"Bagus! Langkah ringkas boleh membantu tubuh kembali tenang."],["Menjerit kepada rakan yang berada berdekatan.",false,"Ini boleh menakutkan atau menyakiti orang lain."],["Menggunakan telefon sepanjang malam supaya tidak perlu fikir.",false,"Kurang tidur boleh menjadikan tekanan lebih sukar diurus."]]},
+  {clue:"Kamu tidak faham satu topik walaupun sudah cuba. Apakah tindakan paling berkesan?",hint:"Meminta bantuan dan memecahkan masalah kepada langkah kecil ialah strategi yang baik.",options:[["Anggap diri tidak pandai dan berhenti belajar.",false,"Satu kesukaran tidak menentukan kebolehan kamu."],["Minta penerangan daripada guru atau rakan dan cuba satu soalan dahulu.",true,"Ya! Meminta bantuan ialah strategi belajar yang matang."],["Salin jawapan tanpa memahami.",false,"Menyalin tidak membantu kamu menguasai topik itu."]]}
+ ]},
+ {title:"Bilik Mesej Rahsia",icon:"💬",story:"Telefon lama memaparkan mesej daripada seorang rakan yang berasa tersisih. Untuk mendapatkan kunci ketiga, tunjukkan empati dan hormati privasi.",questions:[
+  {clue:"Rakan berkata, “Semua orang benci aku. Tiada siapa ajak aku duduk bersama.” Apakah respons yang menunjukkan empati?",hint:"Dengar, akui perasaan dan tawarkan sokongan tanpa menghakimi.",options:[["“Kamu terlalu sensitif.”",false,"Ini menafikan perasaannya."],["“Saya nampak kamu rasa tersisih. Nak duduk bersama saya? Kamu nak cerita?”",true,"Tepat! Kamu mengiktiraf perasaan dan menawarkan sokongan."],["Sebarkan mesej itu kepada kumpulan kelas.",false,"Menjaga privasi rakan sangat penting."]]},
+  {clue:"Kamu nampak seorang murid makan bersendirian. Apakah cara yang mesra untuk mendekatinya?",hint:"Mulakan dengan sapaan yang baik dan beri ruang untuk dia memilih.",options:[["Paksa dia bercerita tentang masalahnya.",false,"Jangan memaksa seseorang berkongsi hal peribadi."],["Sapa dengan sopan dan tanya sama ada dia mahu duduk bersama.",true,"Bagus! Jemputan mesra memberi pilihan dan menunjukkan keprihatinan."],["Ambil gambarnya dan jadikan bahan gurauan.",false,"Ini boleh memalukan dan menyakiti murid itu."]]},
+  {clue:"Rakan berkongsi masalah peribadi dan meminta kamu merahsiakannya, tetapi dia berkata mahu mencederakan diri. Apakah tindakan paling selamat?",hint:"Keselamatan lebih penting daripada janji merahsiakan bahaya. Dapatkan bantuan orang dewasa dipercayai segera.",options:[["Janji tidak memberitahu sesiapa walau apa pun.",false,"Risiko keselamatan memerlukan bantuan orang dewasa."],["Dengar dengan tenang, jangan biarkan dia bersendirian jika bahaya segera, dan beritahu guru/kaunselor atau orang dewasa dipercayai.",true,"Betul. Dapatkan bantuan segera apabila keselamatan seseorang terancam."],["Beritahu semua rakan supaya mereka tahu.",false,"Kongsi hanya dengan orang yang boleh membantu, bukan menyebarkan maklumat."]]}
+ ]},
+ {title:"Bilik Pilihan Berani",icon:"🗝️",story:"Tiga kunci terakhir berkilau di hadapan pintu keluar. Gunakan pertimbangan yang selamat, berani meminta bantuan dan pilih tindakan yang membina.",questions:[
+  {clue:"Kamu menerima komen menghina dalam kumpulan chat kelas. Apakah langkah yang paling bijak?",hint:"Jangan membalas secara impulsif. Simpan bukti dan dapatkan bantuan jika berterusan.",options:[["Balas dengan hinaan yang lebih teruk.",false,"Ini boleh memburukkan konflik."],["Jangan balas ketika marah, simpan bukti dan laporkan kepada guru/ orang dewasa dipercayai jika perlu.",true,"Tepat! Kamu melindungi diri dan menggunakan saluran bantuan."],["Sebarkan kata laluan akaun supaya orang lain boleh membalas.",false,"Jangan kongsi kata laluan atau maklumat peribadi."]]},
+  {clue:"Tekanan berlarutan hingga mengganggu tidur dan pembelajaran. Apakah tindakan yang menunjukkan keberanian?",hint:"Meminta sokongan ialah kemahiran menjaga diri, bukan kelemahan.",options:[["Simpan semuanya kerana takut dianggap lemah.",false,"Memendam masalah boleh membuatkan kamu semakin terbeban."],["Bercakap dengan guru kaunseling, ibu bapa atau orang dewasa yang dipercayai.",true,"Ya! Mendapatkan sokongan ialah langkah yang berani."],["Melepaskan kemarahan kepada sesiapa sahaja.",false,"Tindakan impulsif boleh menyakiti diri dan orang lain."]]},
+  {clue:"Kamu tersilap dan rakan menegur dengan baik. Apakah respons yang menunjukkan kematangan emosi?",hint:"Dengar teguran, fikirkan isi yang berguna dan baiki kesilapan jika perlu.",options:[["Dengar dahulu, akui kesilapan jika benar dan cuba membaikinya.",true,"Cemerlang! Kamu bertanggungjawab dan terbuka untuk belajar."],["Terus menyalahkan orang lain.",false,"Menyalahkan orang lain menghalang kita belajar daripada kesilapan."],["Putuskan persahabatan serta-merta.",false,"Cuba berbincang dengan tenang sebelum membuat keputusan besar."]]}
+ ]}
+];
+let index=0, qIndex=0, solved=[], hints=0, player="", score=0, lives=3, answeredQuestions=[];
+const $=id=>document.getElementById(id);
+$("nameerror").style.display="none";
+// Audio dijana dalam pelayar; tiada fail bunyi luar diperlukan.
+let audioCtx=null, ambientNodes=[], ambientTimer=null, missionTimer=null, remainingSeconds=600, timerExpired=false, soundEnabled=true;
+function stopAmbient(){if(ambientTimer){clearInterval(ambientTimer);ambientTimer=null;}ambientNodes.forEach(n=>{try{n.stop&&n.stop()}catch(e){}try{n.disconnect&&n.disconnect()}catch(e){}});ambientNodes=[];}
+function startAmbient(){if(!soundEnabled)return;try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();stopAmbient();const master=audioCtx.createGain();master.gain.value=0.025;master.connect(audioCtx.destination);[110,164.81].forEach((freq,i)=>{const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type=i?'sine':'triangle';osc.frequency.value=freq;gain.gain.value=i?0.28:0.55;osc.connect(gain);gain.connect(master);osc.start();ambientNodes.push(osc,gain);});ambientNodes.push(master);let flip=false;ambientTimer=setInterval(()=>{if(!audioCtx||!soundEnabled)return;flip=!flip;try{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=flip?392:329.63;g.gain.setValueAtTime(0.0001,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.035,audioCtx.currentTime+0.08);g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+1.2);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+1.25);}catch(e){}},4200);}catch(e){/* Audio tidak disokong: permainan tetap berfungsi. */}}
+function playUnlock(){if(!soundEnabled)return;try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();const now=audioCtx.currentTime;[523.25,659.25,783.99,1046.5].forEach((freq,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(0.0001,now+i*.11);g.gain.exponentialRampToValueAtTime(.16,now+i*.11+.025);g.gain.exponentialRampToValueAtTime(.0001,now+i*.11+.42);o.connect(g);g.connect(audioCtx.destination);o.start(now+i*.11);o.stop(now+i*.11+.45);});}catch(e){}}
+function stopMissionTimer(){if(missionTimer){clearInterval(missionTimer);missionTimer=null;}}
+function updateTimer(){const m=Math.floor(remainingSeconds/60),s=remainingSeconds%60;$("timerText").textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+function startMissionTimer(){stopMissionTimer();timerExpired=false;const enabled=$("timerOn").checked;$("timerBar").classList.toggle('hidden',!enabled);$("timerBar").classList.remove('timeup');if(!enabled)return;remainingSeconds=parseInt($("timerMinutes").value,10)*60;updateTimer();missionTimer=setInterval(()=>{if(remainingSeconds>0){remainingSeconds--;updateTimer();if(remainingSeconds<=60)$("timerBar").style.background='#ffedd5';}if(remainingSeconds<=0){stopMissionTimer();timerExpired=true;$("timerBar").classList.add('timeup');$("timerText").textContent='MASA TAMAT';const f=$("feedback");f.className='feedback bad';f.textContent='⏱️ Masa misi tamat. Tarik nafas, bertenang dan teruskan cabaran mengikut kemampuan kamu. Tiada markah ditolak.';}},1000);}
+$("start").addEventListener("click",()=>{player=$("player").value.trim();if(!player){$("nameerror").style.display="block";$("player").focus();return;} $("nameerror").style.display="none";index=0;qIndex=0;solved=[];hints=0;score=0;lives=3;answeredQuestions=[];soundEnabled=$("soundOn").checked;$("intro").classList.add("hidden");$("game").classList.remove("hidden");startMissionTimer();if(soundEnabled)startAmbient();renderRoom();});
+$("player").addEventListener("input",()=>{if($("player").value.trim())$("nameerror").style.display="none";});
+function renderRoom(){
+ const r=rooms[index],q=r.questions[qIndex];
+ $("roomlabel").textContent=`BILIK ${index+1} DARIPADA ${rooms.length} · CABARAN ${qIndex+1}/${r.questions.length}`;
+ $("roomtitle").textContent=r.title;$("roomicon").textContent=r.icon;
+ $("story").textContent=r.story;
+ $("clue").textContent=q.clue;
+ $("progressbar").style.width=((index*3+qIndex)/(rooms.length*3)*100)+"%";
+ $("score").textContent=score;$("lives").textContent=lives;$("keys").textContent=solved.length+"/4";
+ $("feedback").className="feedback";$("feedback").textContent="";
+ $("digitrow").classList.toggle("hidden",!solved.includes(index));$("digit").textContent=solved.includes(index)?rooms[index].digit:"•";$("digitnote").textContent=solved.includes(index)?rooms[index].note||"Kunci bilik berjaya diperoleh.":"";
+ $("next").classList.add("hidden");$("options").innerHTML="";
+ q.options.forEach((o,i)=>{const btn=document.createElement("button");btn.className="opt";btn.textContent=String.fromCharCode(65+i)+". "+o[0];btn.addEventListener("click",()=>answer(i));$("options").appendChild(btn);});
+}
+function answer(i){
+ const r=rooms[index],q=r.questions[qIndex],o=q.options[i],f=$("feedback");
+ if(answeredQuestions.includes(index+"-"+qIndex)){f.className="feedback good";f.textContent="Cabaran ini sudah diselesaikan. Teruskan ke cabaran seterusnya.";return;}
+ if(o[1]){
+  answeredQuestions.push(index+"-"+qIndex);score+=10;
+  f.className="feedback good";f.textContent="✨ Tepat! +10 markah. "+o[2];
+  Array.from($("options").children).forEach(btn=>btn.disabled=true);
+  const allRoomDone=r.questions.every((_,qi)=>answeredQuestions.includes(index+"-"+qi));
+  if(allRoomDone && !solved.includes(index)){
+    solved.push(index);playUnlock();f.textContent+=" 🗝️ Kunci bilik diperoleh!";
+    $("digitrow").classList.remove("hidden");$("digit").textContent=r.digit;
+    $("digitnote").textContent=r.note||"Kunci berjaya diperoleh.";
+  }
+  $("score").textContent=score;$("keys").textContent=solved.length+"/4";
+  $("progressbar").style.width=((answeredQuestions.length)/(rooms.length*3)*100)+"%";
+  $("next").classList.remove("hidden");
+  const isLast=(index===rooms.length-1 && qIndex===r.questions.length-1);
+  $("next").textContent=isLast?"Buka Pintu Terakhir ➜":(qIndex<r.questions.length-1?"Cabaran Seterusnya ➜":(index<rooms.length-1?"Masuk Bilik Seterusnya ➜":"Selesai"));
+ } else {
+  lives=Math.max(0,lives-1);$("lives").textContent=lives;
+  f.className="feedback bad";f.textContent="Belum tepat. "+o[2]+" Kamu kehilangan satu peluang. Cuba lagi atau minta petunjuk.";
+  if(lives===0){f.textContent+=" Jangan risau—misi boleh dimulakan semula. Gunakan petunjuk dan fikir dengan tenang."; }
+ }
+}
+$("hint").addEventListener("click",()=>{hints++;const f=$("feedback");f.className="feedback";f.textContent="🔍 PETUNJUK: "+rooms[index].questions[qIndex].hint;f.style.display="block";});
+$("next").addEventListener("click",()=>{
+ if(!answeredQuestions.includes(index+"-"+qIndex))return;
+ const r=rooms[index];
+ if(qIndex<r.questions.length-1){qIndex++;renderRoom();return;}
+ if(index<rooms.length-1){index++;qIndex=0;renderRoom();return;}
+ showFinish();
+});
+function showFinish(){
+ stopMissionTimer();stopAmbient();
+ $("game").classList.add("hidden");$("finish").classList.remove("hidden");$("certificatePanel").classList.add("hidden");
+ $("progressbar").style.width="100%";$("finalcode").textContent=rooms.map(r=>r.digit).join("");
+ $("finishTitle").textContent=`Tahniah, ${player}!`;
+ $("finishText").textContent=`Kamu berjaya menyelesaikan ${answeredQuestions.length} cabaran, mengumpulkan ${score} markah dan menemui kod rahsia ${rooms.map(r=>r.digit).join("")}. ${hints?`Kamu menggunakan ${hints} petunjuk. `:""}Ejen yang hebat ialah ejen yang terus belajar, berempati dan meminta bantuan apabila perlu.`;
+ $("certName").textContent=player;$("certScore").textContent=`PENCAPAIAN: ${score} MARKAH · ${answeredQuestions.length} CABARAN DISELESAIKAN`;
+}
+$("certificateBtn").addEventListener("click",()=>{$("finish").classList.add("hidden");$("certificatePanel").classList.remove("hidden");});
+$("backFinish").addEventListener("click",()=>{$("certificatePanel").classList.add("hidden");$("finish").classList.remove("hidden");});
+$("printCert").addEventListener("click",()=>window.print());
+$("restart").addEventListener("click",()=>{stopMissionTimer();stopAmbient();index=0;qIndex=0;solved=[];hints=0;score=0;lives=3;answeredQuestions=[];$("finish").classList.add("hidden");$("certificatePanel").classList.add("hidden");$("intro").classList.remove("hidden");$("player").value="";$("nameerror").style.display="none";});
+</script>
+</body>
+</html>
